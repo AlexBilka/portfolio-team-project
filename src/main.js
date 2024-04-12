@@ -1,65 +1,49 @@
 // ================ import modules ================
 
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+// import iziToast from 'izitoast';
+// import 'izitoast/dist/css/iziToast.min.css';
 
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
-import { getPixabayItems } from './js/pixabay-api';
-import { galleryMarkup } from './js/render-functions';
+// import { getItems } from './js/go-it-api';
+// import { createMarkup } from './js/render-functions';
 
 // ============= document elements =============
 
-const form = document.querySelector('.form');
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
-const loadMorebtn = document.querySelector('.load-more');
+// const element = document.querySelector('elem');
+// const form = document.querySelector('form');
+// const button = document.querySelector('.button-class');
+// const attribute = document.querySelectorAll('[attribute]');
 
-form.addEventListener('submit', handleSubmit);
-loadMorebtn.addEventListener('click', handleClick);
+// form.addEventListener('submit', handleSubmit);
+// button.addEventListener('click', handleClick);
 
-// =========== SimpleLightbox initialization ===========
+// =========== module initialization params ===========
 
-const lightbox = new SimpleLightbox('.gallery-link', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  overlay: true,
-  overlayOpacity: 0.7,
+const module = new Module('.element', {
+  params,
 });
 
-let page = 1;
-let query = '';
-
-// ============= Submit function =============
+// ============= / Submit function / =============
 
 async function handleSubmit(event) {
   event.preventDefault();
 
-  loaderPlay();
-  loadMorebtn.classList.add('is-hidden');
-  gallery.innerHTML = ''; // Clear gallery
-  page = 1;
-  query = event.target['queryInput'].value.trim();
+  element.innerHTML = ''; // Clear markup
+  query = event.target['attribute'].value.trim();
 
   if (query !== '') {
     // --------------------------------------------
     try {
-      const res = await getPixabayItems(query, page);
-      if (res.hits.length === 0) {
+      const res = await getItems(email, message);
+      if (res.length === 0) {
         loaderStop();
         return iziToast.error({
           message:
-            'Sorry, there are no images matching your search query. Please try again!',
+            'Sorry, there are no items matching your search query. Please try again!',
           position: 'topRight',
         });
       }
-      gallery.innerHTML = galleryMarkup(res.hits); // Create markup
-      if (res.total > 15) {
-        loadMorebtn.classList.remove('is-hidden');
-      }
-      lightbox.refresh();
-      event.target['queryInput'].value = ''; // clear input value
+      element.innerHTML = galleryMarkup(res.hits); // Create markup
+      event.target['attribute'].value = ''; // clear input value
       // --------------------------------------------
     } catch (err) {
       console.log(err);
@@ -67,54 +51,17 @@ async function handleSubmit(event) {
     // --------------------------------------------
   } else {
     iziToast.info({
-      message: 'Please, enter a query, for example "cats"',
+      message: 'Please, enter a query!',
       position: 'topLeft',
     });
   }
-  loaderStop();
 }
 
-// ============= Load more function =============
+// ============= / internal functions / =============
 
-async function handleClick() {
-  loaderPlay();
-  page += 1;
-  // --------------------------------------------
-  try {
-    const res = await getPixabayItems(query, page);
-    const lastPage = Math.ceil(res.total / 15);
-    gallery.insertAdjacentHTML('beforeend', galleryMarkup(res.hits)); // Create markup
-    lightbox.refresh();
-
-    const { height: cardHeight } = document
-      .querySelector('.gallery')
-      .firstElementChild.getBoundingClientRect();
-
-    window.scrollBy({
-      top: cardHeight * 2,
-      behavior: 'smooth',
-    });
-
-    if (lastPage === page) {
-      loadMorebtn.classList.add('is-hidden');
-      iziToast.info({
-        message: "We're sorry, but you've reached the end of search results.",
-        position: 'topLeft',
-      });
-    }
-    // --------------------------------------------
-  } catch (err) {
-    console.log(err);
-  }
-
-  loaderStop();
+function fooOn(value) {
+  console.log(value);
 }
-
-// ============= Loader functions =============
-
-function loaderPlay() {
-  loader.classList.remove('is-hidden');
-}
-function loaderStop() {
-  loader.classList.add('is-hidden');
+function fooOff(value) {
+  console.error(value);
 }

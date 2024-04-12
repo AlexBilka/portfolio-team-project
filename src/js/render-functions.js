@@ -1,9 +1,9 @@
-export function galleryMarkup(params) {
+export function createMarkup(params) {
   return params
     .map(
-      item => `<li class="gallery-item">
-                <a class="gallery-link" href='${item.largeImageURL}'>
-                  <img class="gallery-image" src='${item.webformatURL}' alt='${item.tags}' />
+      item => `<li class="element-item">
+                <a class="element-link" href='${item.largeImageURL}'>
+                  <img class="element-image" src='${item.webformatURL}' alt='${item.tags}' />
                 </a>
                 <div class="stats">
                   <p><span>Likes</span>${item.likes}</p>
